@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ToM・WCC・EF 互動 Demo</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;background:#f5f6f8;color:#222;margin:0}
+main{max-width:900px;margin:auto;padding:24px}
+section{background:white;border:1px solid #ddd;border-radius:18px;padding:20px;margin:16px 0}
+button{padding:10px 14px;margin:6px 6px 6px 0;border:1px solid #ccc;border-radius:12px;background:white}
+.result{margin-top:10px;padding:12px;background:#f7f7f7;border-radius:12px;min-height:40px}
+.big{font-size:38px;letter-spacing:8px;text-align:center;padding:20px}
+.step{padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:10px;cursor:pointer}
+table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #ddd;text-align:left}
+small{color:#666}
+</style>
+</head>
+<body>
+<main>
+<h1>自閉症三理論互動 Demo</h1>
+<p>ToM 心智理論・WCC 弱中央統整・EF 執行功能。這是課堂教學示範，不是診斷工具。</p>
+
+<section>
+<h2>1｜ToM：換視角</h2>
+<p>小安把餅乾放進<strong>藍色盒子</strong>後離開。小哲把餅乾移到<strong>紅色抽屜</strong>。小安回來後，第一個會去哪裡找？</p>
+<button onclick="tom('blue')">藍色盒子</button>
+<button onclick="tom('red')">紅色抽屜</button>
+<div id="tomR" class="result">先選一個答案。</div>
+<p><small>核心：題目不是問真實位置，而是問「小安相信餅乾在哪裡」。</small></p>
+</section>
+
+<section>
+<h2>2｜WCC：局部 vs 整體</h2>
+<p>第一眼你比較容易注意到什麼？</p>
+<div class="big">▲ ▲ ▲ ▲ ★ ▲ ▲ ▲ ▲</div>
+<button onclick="wcc('detail')">先看到 ★</button>
+<button onclick="wcc('whole')">先看到整體排列</button>
+<div id="wccR" class="result">選一個。</div>
+<p><small>核心：WCC常用來描述較偏向局部、細節導向的資訊處理；不是「完全看不到整體」。</small></p>
+</section>
+
+<section>
+<h2>3｜EF：知道要做 ≠ 能順利啟動</h2>
+<p>情境：明早8點要報告。依你認為合理的順序點選：</p>
+<div class="step" data-k="a">整理報告檔案</div>
+<div class="step" data-k="b">確認集合時間</div>
+<div class="step" data-k="c">把充電器放進包包</div>
+<div class="step" data-k="d">順一次開頭與轉場</div>
+<button onclick="checkEF()">完成排序</button>
+<button onclick="resetEF()">重來</button>
+<div id="efR" class="result">依序點選四項。</div>
+<p><small>核心：EF包含規劃、啟動、工作記憶、抑制、切換與監控等。</small></p>
+</section>
+
+<section>
+<h2>三個理論收束</h2>
+<table>
+<tr><th>理論</th><th>核心問題</th><th>最適合的互動</th></tr>
+<tr><td>ToM</td><td>他人的心理狀態是否和我不同？</td><td>換視角</td></tr>
+<tr><td>WCC</td><td>先抓局部還是自動整合整體？</td><td>局部 ↔ 整體</td></tr>
+<tr><td>EF</td><td>能不能把目標變成可執行步驟？</td><td>排序／執行</td></tr>
+</table>
+</section>
+</main>
+<script>
+function tom(x){
+ document.getElementById('tomR').innerHTML=x==='blue'
+ ?'✔ 小安不知道餅乾被移走，所以會依原本信念去藍色盒子找。'
+ :'這是餅乾的真實位置，但ToM題目要分開「自己知道的」和「別人知道的」。';
+}
+function wcc(x){
+ document.getElementById('wccR').innerHTML=x==='detail'
+ ?'你先抓到局部異常，正好可以帶出細節導向的處理方式。'
+ :'你先抓整體排列，可以拿來對照局部導向與整體整合的差異。';
+}
+let order=[]; const label={a:'整理報告檔案',b:'確認集合時間',c:'把充電器放進包包',d:'順一次開頭與轉場'};
+document.querySelectorAll('.step').forEach(el=>el.onclick=()=>{
+ let k=el.dataset.k;if(order.includes(k))return;order.push(k);el.textContent=order.length+'｜'+label[k];
+ document.getElementById('efR').textContent='目前：'+order.map(x=>label[x]).join(' → ');
+});
+function checkEF(){
+ document.getElementById('efR').textContent=order.length===4
+ ?'✔ 重點不是唯一正確順序，而是必須規劃、保持目標、依序執行，必要時還要調整。'
+ :'還沒排完。EF互動要凸顯的是把目標拆成順序並實際執行。';
+}
+function resetEF(){
+ order=[];document.querySelectorAll('.step').forEach(el=>el.textContent=label[el.dataset.k]);
+ document.getElementById('efR').textContent='依序點選四項。';
+}
+</script>
+</body>
+</html>
